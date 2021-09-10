@@ -2,9 +2,12 @@
 //
 // Licensed under the MIT License. See LICENSE.txt in the project root for license information.
 
+using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Text;
 using Microsoft.Graphics.Canvas.UI.Composition;
+using System;
 using System.Numerics;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Graphics.DirectX;
 using Windows.UI;
@@ -38,34 +41,17 @@ namespace CompositionExample
             DrawDrawingSurface();
         }
 
-        void DrawDrawingSurface()
+        async void DrawDrawingSurface()
         {
             ++drawCount;
 
             using (var ds = CanvasComposition.CreateDrawingSession(drawingSurface))
             {
                 ds.Clear(Colors.Transparent);
-
-                var rect = new Rect(new Point(2, 2), (drawingSurface.Size.ToVector2() - new Vector2(4, 4)).ToSize());
-
-                ds.FillRoundedRectangle(rect, 15, 15, Colors.LightBlue);
-                ds.DrawRoundedRectangle(rect, 15, 15, Colors.Gray, 2);
-
-                ds.DrawText("This is a composition drawing surface", rect, Colors.Black, new CanvasTextFormat()
-                {
-                    FontFamily = "Comic Sans MS",
-                    FontSize = 32,
-                    WordWrapping = CanvasWordWrapping.WholeWord,
-                    VerticalAlignment = CanvasVerticalAlignment.Center,
-                    HorizontalAlignment = CanvasHorizontalAlignment.Center
-                });
-
-                ds.DrawText("Draws: " + drawCount, rect, Colors.Black, new CanvasTextFormat()
-                {
-                    FontSize = 10,
-                    VerticalAlignment = CanvasVerticalAlignment.Bottom,
-                    HorizontalAlignment = CanvasHorizontalAlignment.Center
-                });
+                var rect = new Rect(new Point(0, 0), (drawingSurface.Size.ToVector2() - new Vector2(20, 20)).ToSize());
+                ds.FillRoundedRectangle(rect, 30, 30, Colors.LightBlue);
+                var image = await CanvasBitmap.LoadAsync(ds, "dog.jpg");
+                ds.DrawImage(image, 0, 0, rect, 1f, CanvasImageInterpolation.Linear, CanvasComposite.SourceIn);
             }
         }
     }

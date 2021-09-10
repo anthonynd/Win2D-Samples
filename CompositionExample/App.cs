@@ -95,19 +95,16 @@ namespace CompositionExample
             compositionTarget = compositor.CreateTargetForCurrentView();
             compositionTarget.Root = rootVisual;
 
-            var ignoredTask = UpdateVisualsLoop();
+            UpdateVisualsLoop();
         }
 
-        async Task UpdateVisualsLoop()
+        void UpdateVisualsLoop()
         {
             var token = cancellationTokenSource.Token;
 
-            while (!token.IsCancellationRequested)
+            if (!token.IsCancellationRequested)
             {
-                UpdateVisual(swapChainRenderer.Visual, swapChainRenderer.Size);
                 UpdateVisual(drawingSurfaceRenderer.Visual, drawingSurfaceRenderer.Size);
-
-                await Task.Delay(TimeSpan.FromSeconds(2));
             }
         }
 
@@ -120,10 +117,7 @@ namespace CompositionExample
         void UpdateVisualPosition(Visual visual, Size size)
         {
             var oldOffset = visual.Offset;
-            var newOffset = new Vector3(
-                (float)(rnd.NextDouble() * (window.Bounds.Width - size.Width)),
-                (float)(rnd.NextDouble() * (window.Bounds.Height - size.Height)),
-                0);
+            var newOffset = new Vector3(100f, 100f, 100f);
 
             visual.Offset = newOffset;
             visual.Size = size.ToVector2();
@@ -134,7 +128,7 @@ namespace CompositionExample
         void UpdateVisualOpacity(Visual visual)
         {
             var oldOpacity = visual.Opacity;
-            var newOpacity = (float)rnd.NextDouble();
+            var newOpacity = 1.0f;
 
             var animation = compositor.CreateScalarKeyFrameAnimation();
             animation.InsertKeyFrame(0, oldOpacity);

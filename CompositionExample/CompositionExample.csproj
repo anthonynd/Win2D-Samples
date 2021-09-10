@@ -138,6 +138,7 @@
     <None Include="TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dog.jpg" />
     <Content Include="RuntimeDirectives.rd.xml" />
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
